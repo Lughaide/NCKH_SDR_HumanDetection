@@ -1,6 +1,6 @@
 # NCKH_SDR_HumanDetection
 ## Content
-GNU Radio .grc flowgraphs and hier blocks. For gathering CSI using SDRs.
+GNU Radio .grc flowgraphs and hier blocks. For gathering CSI data using SDRs.
 ## Source
 The flowgraphs and blocks are designed using [GNU Radio](https://github.com/gnuradio/gnuradio)
 ![GNU Radio](https://github.com/gnuradio/gnuradio/raw/main/docs/gnuradio.png)
