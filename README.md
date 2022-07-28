@@ -1,6 +1,10 @@
 # NCKH_SDR_HumanDetection
+## Description
+GitHub repository for Human detection using Wireless Signals and SDRs.
 ## Content
-GNU Radio .grc flowgraphs and hier blocks. For gathering CSI data using SDRs.
+- GNU Radio .grc flowgraphs and hier blocks. For gathering CSI data using SDRs.
+- Google Colaboratory script for Deep learning model.
+- Dataset is shared on Google Drive: [Dataset](https://drive.google.com/drive/folders/1s_cdYp4hh06bH-QlI7Fbl0TOXgq8W-01?usp=sharing)
 ## Source
 The flowgraphs and blocks are designed using [GNU Radio](https://github.com/gnuradio/gnuradio)
 ![GNU Radio](https://github.com/gnuradio/gnuradio/raw/main/docs/gnuradio.png)
