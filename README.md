@@ -1,6 +1,6 @@
 # NCKH_SDR_HumanDetection
 ## Description
-GitHub repository for Human detection using Wireless Signals and SDRs.
+GitHub repository for: Experimental framework for radio-based human detection using deep learning and SDR devices.
 ## Content
 - GNU Radio .grc flowgraphs and hier blocks. For gathering CSI data using SDRs.
 - Google Colaboratory script for Deep learning model.
