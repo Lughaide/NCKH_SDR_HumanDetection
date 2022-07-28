@@ -1,6 +1,6 @@
 # NCKH_SDR_HumanDetection
 ## Description
-GitHub repository for: Experimental framework for radio-based human detection using deep learning and SDR devices.
+GitHub repository for: <b>Experimental framework for radio-based human detection using deep learning and SDR devices.</b>
 ## Content
 - GNU Radio .grc flowgraphs and hier blocks. For gathering CSI data using SDRs.
 - Google Colaboratory script for Deep learning model.
