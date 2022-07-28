@@ -1,0 +1,186 @@
+options:
+  parameters:
+    author: rook
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: hb
+    hier_block_src_path: '.:'
+    id: csi_extractor_block
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Extracting CSI Data from CE
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: channel_estimation_source
+  id: pad_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: in
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '64'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [320, 140.0]
+    rotation: 0
+    state: true
+- name: channel_state_data
+  id: pad_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: out
+    num_streams: '1'
+    optional: 'False'
+    type: float
+    vlen: '64'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [888, 116.0]
+    rotation: 0
+    state: true
+- name: csi_extractor_script
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\nimport pmt\n\n\nclass blk(gr.sync_block):  # other\
+      \ base classes are basic_block, decim_block, interp_block\n    \"\"\"Embedded\
+      \ Python Block example - a simple multiply const\"\"\"\n\n    def __init__(self,\
+      \ vector_size=64, num_subcarrier=10):  # only default arguments here\n     \
+      \   \"\"\"arguments to this function show up as parameters in GRC\"\"\"\n  \
+      \      gr.sync_block.__init__(\n            self,\n            name='CSI Information\
+      \ Extractor',   # will show up in GRC\n            in_sig=[(np.complex64, vector_size)],\n\
+      \            out_sig=[(np.float32, vector_size), np.float32]\n        )\n  \
+      \      # if an attribute with the same name as a parameter is found,\n     \
+      \   # a callback is registered (properties work, too).\n        self.num_subcarrier\
+      \ = num_subcarrier\n\n    def work(self, input_items, output_items):\n     \
+      \   tagTuple = self.get_tags_in_window(0, 0, len(input_items[0]))\n        for\
+      \ tag in tagTuple:\n            if (pmt.to_python(tag.key) == 'ofdm_sync_chan_taps'):\n\
+      \                temp = pmt.to_python(tag.value)\n                magnitude\
+      \ = abs(temp)\n                output_items[0][:] = magnitude\n            \
+      \    output_items[1][:] = magnitude[self.num_subcarrier]\n\n        return len(output_items[0])\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_subcarrier: num_subcarrier
+    vector_size: vector_size
+  states:
+    _io_cache: ('CSI Information Extractor', 'blk', [('vector_size', '64'), ('num_subcarrier',
+      '10')], [('0', 'complex', 64)], [('0', 'float', 64), ('1', 'float', 1)], 'Embedded
+      Python Block example - a simple multiply const', ['num_subcarrier'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 140.0]
+    rotation: 0
+    state: true
+- name: csi_single_carrier
+  id: pad_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: out
+    num_streams: '1'
+    optional: 'True'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [888, 196.0]
+    rotation: 0
+    state: true
+- name: import_pmt
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import pmt
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [664, 20.0]
+    rotation: 0
+    state: true
+- name: num_subcarrier
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Selected single subcarrier
+    short_id: ''
+    type: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [456, 20.0]
+    rotation: 0
+    state: true
+- name: vector_size
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Vector Size for input
+    short_id: ''
+    type: ''
+    value: '64'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 20.0]
+    rotation: 0
+    state: true
+
+connections:
+- [channel_estimation_source, '0', csi_extractor_script, '0']
+- [csi_extractor_script, '0', channel_state_data, '0']
+- [csi_extractor_script, '1', csi_single_carrier, '0']
+
+metadata:
+  file_format: 1
